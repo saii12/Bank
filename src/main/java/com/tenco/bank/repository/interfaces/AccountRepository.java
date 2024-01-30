@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.tenco.bank.repository.entity.Account;
 
-@Mapper
+@Mapper // 반드시 확인
 public interface AccountRepository {
 
 	public int insert(Account account);
@@ -14,8 +14,8 @@ public interface AccountRepository {
 	public int deleteById(Integer id);
 	
 	// 계좌 조회 - 1 유저, N 계좌
-	public Account findByNumber(Integer id);
-	public List<Account> findAllByUserId();
+	public Account findByNumber(String number);
+	public List<Account> findAllByUserId(Integer userId);
 	
 	
 }
