@@ -68,7 +68,7 @@ public class UserController {
 		}
 		
 		userService.createUser(dto);
-		return "redirect:/user/sign-in"; //GET 방식
+		return "redirect:/user/sign-in"; //GET 방식 http://localhost:80/user/sign-in
 	}
 	
 	// 1. 로그인페이지 요청처리 -- 페이지 요청

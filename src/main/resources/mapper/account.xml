@@ -8,7 +8,7 @@
 		values(#{number}, #{password}, #{balance}, #{userId}, now())
 	</insert>
 	
-	<update id="update">
+	<update id="updateById">
 		update account_tb set 
 					number = #{number},
                     password = #{password},

@@ -73,13 +73,13 @@
           <a class="nav-link" href="/account/list">계좌 목록</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">출금</a>
+          <a class="nav-link" href="/account/withdraw">출금</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">입금</a>
+          <a class="nav-link" href="/account/deposit">입금</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">이체</a>
+          <a class="nav-link" href="/account/transfer">이체</a>
         </li>
       </ul>
       <hr class="d-sm-none">
