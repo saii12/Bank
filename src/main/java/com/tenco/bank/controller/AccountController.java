@@ -7,8 +7,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.tenco.bank.dto.AccountSaveFormDTO;
 import com.tenco.bank.dto.depositFormDTO;
@@ -17,6 +19,7 @@ import com.tenco.bank.dto.withdrawFormDTO;
 import com.tenco.bank.handler.exception.CustomRestfulException;
 import com.tenco.bank.handler.exception.UnAuthorizedException;
 import com.tenco.bank.repository.entity.Account;
+import com.tenco.bank.repository.entity.CustomHistoryEntity;
 import com.tenco.bank.repository.entity.User;
 import com.tenco.bank.service.AccountService;
 import com.tenco.bank.utils.Define;
@@ -187,7 +190,7 @@ public class AccountController {
 			throw new CustomRestfulException("금액을 입력하세요", HttpStatus.BAD_REQUEST);
 		}
 
-		if (dto.getAmount().longValue() < 0) { // longValue?
+		if (dto.getAmount().longValue() <= 0) { // longValue?
 			throw new CustomRestfulException("잘못된 금액입니다", HttpStatus.BAD_REQUEST);
 		}
 
@@ -226,12 +229,12 @@ public class AccountController {
 			throw new CustomRestfulException("금액을 입력하세요", HttpStatus.BAD_REQUEST);
 		}
 
-		if (dto.getAmount().longValue() < 0) { // longValue?
+		if (dto.getAmount().longValue() <= 0) { // longValue?
 			throw new CustomRestfulException("잘못된 금액입니다", HttpStatus.BAD_REQUEST);
 		}
 		
 		if (dto.getWAccountNumber() == null || dto.getWAccountNumber().isEmpty()) {
-			throw new CustomRestfulException("입금 계좌번호를 입력하세요", HttpStatus.BAD_REQUEST);
+			throw new CustomRestfulException("출금 계좌번호를 입력하세요", HttpStatus.BAD_REQUEST);
 		}
 		
 		if (dto.getPassword() == null || dto.getPassword().isEmpty()) {
@@ -239,11 +242,43 @@ public class AccountController {
 		}
 		
 		if (dto.getDAccountNumber() == null || dto.getDAccountNumber().isEmpty()) {
-			throw new CustomRestfulException("출금 계좌번호를 입력하세요", HttpStatus.BAD_REQUEST);
+			throw new CustomRestfulException("입금 계좌번호를 입력하세요", HttpStatus.BAD_REQUEST);
 		}
 		
 		accountService.updateAccountTransfer(dto, principal.getId());
 		
 		return "redirect:/account/list";
+	}
+	
+	// 계좌 상세 보기 페이지 -- 전체(입출금), 입금, 출금
+	// http://localhost:80/account/detail/1
+	// {id} 파라미터 받으려면 PathVariable 어노테이션 사용
+	// RequestParam에서 required = false 해야 type 파라미터 값 없을 때도 기본값"all"로 인식함(true가 기본설정임)
+	@GetMapping("/detail/{id}")
+	public String detail(@PathVariable Integer id, 
+			@RequestParam(name = "type", defaultValue = "all", required = false) String type, 
+			Model model) {
+		
+		//System.out.println("type : " + type);
+		
+		// 인증검사
+		User principal = (User) session.getAttribute(Define.PRINCIPAL); // Object 타입을 다운캐스팅
+		if (principal == null) {
+			throw new UnAuthorizedException(Define.ENTER_YOUR_LOGIN, HttpStatus.UNAUTHORIZED);
+		}
+		
+		Account account = accountService.readByAccountId(id);
+		
+		// 서비스 호출
+		List<CustomHistoryEntity> historyList = accountService.readHistoryListByAccount(type, id);
+		System.out.println("list : " + historyList.toString());
+		
+		model.addAttribute("account", account);
+		model.addAttribute("historyList", historyList);
+		model.addAttribute("principal", principal);
+		
+		
+		// 응답 결과물 --> jsp 내려주기
+		return "account/detail";
 	}
 }

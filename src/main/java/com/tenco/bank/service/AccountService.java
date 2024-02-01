@@ -13,6 +13,7 @@ import com.tenco.bank.dto.transferFormDTO;
 import com.tenco.bank.dto.withdrawFormDTO;
 import com.tenco.bank.handler.exception.CustomRestfulException;
 import com.tenco.bank.repository.entity.Account;
+import com.tenco.bank.repository.entity.CustomHistoryEntity;
 import com.tenco.bank.repository.entity.History;
 import com.tenco.bank.repository.interfaces.AccountRepository;
 import com.tenco.bank.repository.interfaces.HistoryRepository;
@@ -167,7 +168,7 @@ public class AccountService {
 		}
 		
 		if(dAccountEntity == null) {
-			throw new CustomRestfulException(Define.NOT_EXIST_ACCOUNT, HttpStatus.INTERNAL_SERVER_ERROR);
+			throw new CustomRestfulException("상대방의 계좌번호가 없습니다", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
 		wAccountEntity.checkOwner(id);
@@ -175,10 +176,15 @@ public class AccountService {
 		wAccountEntity.checkBalance(dto.getAmount());
 		
 		wAccountEntity.withdraw(dto.getAmount());
-		accountRepository.updateById(wAccountEntity);
+		int resultRowCountWithdraw = accountRepository.updateById(wAccountEntity); // 실행 결과 예외처리 하기 위함
 		
 		dAccountEntity.deposit(dto.getAmount());
-		accountRepository.updateById(dAccountEntity);
+		int resultRowCountDeposit = accountRepository.updateById(dAccountEntity);
+		
+		if(resultRowCountWithdraw != 1 && resultRowCountDeposit != 1) { // 왜 &&이지??
+			throw new CustomRestfulException("정상 처리되지 않았습니다", HttpStatus.INTERNAL_SERVER_ERROR);
+
+		}
 		
 		History history = new History();
 		history.setAmount(dto.getAmount());
@@ -191,6 +197,25 @@ public class AccountService {
 		if (rowResultCount != 1) {
 			throw new CustomRestfulException("정상 처리되지 않았습니다", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+		
+	
+	}
+
+	/**
+	 * 단일계좌 거래내역 검색
+	 * @param type = [all, deposit, withdraw]
+	 * @param id(account_id)
+	 * @return 동적쿼리 -List
+	 */
+	public List<CustomHistoryEntity> readHistoryListByAccount(String type, Integer id) {
+		
+		return historyRepository.findByIdHistoryType(type, id);
+		
+	}
+	
+	// 단일계좌 조회 - AccountById
+	public Account readByAccountId(Integer id) {
+		return accountRepository.findByAccountId(id);
 	}
 
 }

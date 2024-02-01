@@ -1,35 +1,88 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.tenco.bank.repository.interfaces.HistoryRepository">
-	
+<mapper
+	namespace="com.tenco.bank.repository.interfaces.HistoryRepository">
+
 	<!-- db에 now default 설정해놔서 created_at insert 안해도 됨 -->
 	<insert id="insert">
-		insert into history_tb 
-			(amount, w_account_id, d_account_id, w_balance, d_balance)
-		values (#{amount}, #{wAccountId}, #{dAccountId}, #{wBalance}, #{dBalance})
+		insert into history_tb
+		(amount, w_account_id,
+		d_account_id, w_balance, d_balance)
+		values (#{amount},
+		#{wAccountId},
+		#{dAccountId}, #{wBalance}, #{dBalance})
 	</insert>
-	
-	<update id="update" parameterType="com.tenco.bank.repository.entity.History"> <!-- parameterType 생략가능 -->
-		update history_tb set 
-					amount = #{amount},
-                    w_account_id = #{wAccountId},
-                    d_account_id = #{dAccountId},
-                    w_balance = #{wBalance},
-                    d_balance = #{dBalance}
-                    where id = #{id}
+
+	<update id="update"
+		parameterType="com.tenco.bank.repository.entity.History"> <!-- parameterType 생략가능 -->
+		update history_tb set
+		amount = #{amount},
+		w_account_id = #{wAccountId},
+		d_account_id = #{dAccountId},
+		w_balance = #{wBalance},
+		d_balance =
+		#{dBalance}
+		where id = #{id}
 	</update>
-	
+
 	<delete id="delete" parameterType="int"> <!-- parameterType 생략가능 -->
 		delete from history_tb where id = #{id}
 	</delete>
-	
-	<select id="findById" resultType="com.tenco.bank.repository.entity.History">
+
+	<select id="findById"
+		resultType="com.tenco.bank.repository.entity.History">
 		select * from history_tb where id = #{id}
 	</select>
-	
-	<select id="findAll" resultType="com.tenco.bank.repository.entity.History">
+
+	<select id="findAll"
+		resultType="com.tenco.bank.repository.entity.History">
 		select * from history_tb
+	</select>
+
+	<select id="findByIdHistoryType"
+		resultType="com.tenco.bank.repository.entity.CustomHistoryEntity">
+		<if test="type == 'deposit'"> <!-- '' 문자열 따옴표 빠뜨리지 않기 -->
+			select h.id, h.amount, h.d_balance as balance, a.number as receiver, <!-- as receiver 중요 -->
+			h.created_at,
+			ifnull(b.number, 'ATM') as sender 
+			from history_tb as h
+			left join account_tb as a
+			on h.d_account_id = a.id
+			left join account_tb as b
+			on h.w_account_id = b.id
+			where h.d_account_id = #{id} <!-- ; 붙이지 않기 -->
+		</if>
+
+		<if test="type == 'withdraw'">
+			select h.id, h.amount, h.w_balance as balance, a.number as sender, <!-- as sender 중요 -->
+			h.created_at,
+			ifnull(b.number, 'ATM') as receiver 
+			from history_tb as h
+			left join account_tb as a 
+			on h.w_account_id = a.id
+			left join account_tb as b
+			on h.d_account_id = b.id
+			where h.w_account_id = #{id}
+		</if>
+
+		<if test="type == 'all'">
+			select h.id, h.amount,
+			case when h.w_account_id = #{id} then (h.w_balance)
+			when h.d_account_id = #{id} then (h.d_balance)
+			end as balance,
+			ifnull(wa.number, 'ATM') as sender,
+			ifnull(da.number, 'ATM') as receiver,
+			h.created_at
+			from history_tb as h
+			left join account_tb as da
+			on h.d_account_id = da.id
+			left join account_tb as wa
+			on h.w_account_id = wa.id
+			where h.d_account_id = #{id} or h.w_account_id = #{id}
+		</if>
+
+
 	</select>
 
 </mapper>
