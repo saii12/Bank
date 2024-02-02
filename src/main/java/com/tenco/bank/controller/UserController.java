@@ -53,7 +53,7 @@ public class UserController {
 	@PostMapping("/sign-up")
 	public String signProc(SignUpFormDTO dto) {
 		
-		// 1. 인증검사 x
+		// 1. 인증 검사 x
 		// 2. 유효성 검사
 		if(dto.getUsername() == null || dto.getUsername().isEmpty()) {
 			throw new CustomRestfulException("username을 입력하세요", HttpStatus.BAD_REQUEST);
@@ -86,12 +86,13 @@ public class UserController {
 	/**
 	 * 로그인 요청처리
 	 * @param SignInFormDTO
-	 * @return 추후 account/list 페이지로 이동 예정(todo)
+	 * @return account/list.jsp 
 	 */
 	@PostMapping("/sign-in")
 	public String signInProc(SignInFormDTO dto) {
 		
-		// 1. 인증검사, 유효성 검사(인증 검사 먼저)
+		// 1. 인증 검사, 유효성 검사(인증 검사 먼저)
+		// 인증 검사 x
 		// 유효성 검사
 		if(dto.getUsername() == null || dto.getUsername().isEmpty()) {
 			throw new CustomRestfulException("username을 입력하시오", HttpStatus.BAD_REQUEST);

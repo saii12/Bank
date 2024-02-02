@@ -51,11 +51,11 @@ public class AccountController {
 	@GetMapping("/save")
 	public String savePage() {
 
-		// 인증검사
-		User principal = (User) session.getAttribute(Define.PRINCIPAL); // Object 타입을 다운캐스팅
-		if (principal == null) {
-			throw new UnAuthorizedException("로그인 먼저 해주세요", HttpStatus.UNAUTHORIZED);
-		}
+//		// 인증검사
+//		User principal = (User) session.getAttribute(Define.PRINCIPAL); // Object 타입을 다운캐스팅
+//		if (principal == null) {
+//			throw new UnAuthorizedException("로그인 먼저 해주세요", HttpStatus.UNAUTHORIZED);
+//		}
 		return "account/saveForm";
 	}
 
@@ -71,9 +71,9 @@ public class AccountController {
 
 		// 1. 인증검사
 		User principal = (User) session.getAttribute(Define.PRINCIPAL); // Object 타입을 다운캐스팅
-		if (principal == null) {
-			throw new UnAuthorizedException("로그인 먼저 해주세요", HttpStatus.UNAUTHORIZED);
-		}
+//		if (principal == null) {
+//			throw new UnAuthorizedException("로그인 먼저 해주세요", HttpStatus.UNAUTHORIZED);
+//		}
 
 		// 2. 유효성 검사
 		if (dto.getNumber() == null || dto.getNumber().isEmpty()) {
@@ -105,9 +105,9 @@ public class AccountController {
 	public String listPage(Model model) {
 		// 1. 인증검사
 		User principal = (User) session.getAttribute(Define.PRINCIPAL); // Object 타입을 다운캐스팅
-		if (principal == null) {
-			throw new UnAuthorizedException("로그인 먼저 해주세요", HttpStatus.UNAUTHORIZED);
-		}
+//		if (principal == null) {
+//			throw new UnAuthorizedException("로그인 먼저 해주세요", HttpStatus.UNAUTHORIZED);
+//		}
 
 		// 경우의 수 유, 무
 		List<Account> accountList = accountService.readAccountListByUserId(principal.getId());
@@ -125,11 +125,11 @@ public class AccountController {
 	// http://localhost:80/account/withdraw
 	@GetMapping("/withdraw")
 	public String withdrawPage() {
-		// 1. 인증검사
-		User principal = (User) session.getAttribute(Define.PRINCIPAL); // Object 타입을 다운캐스팅
-		if (principal == null) {
-			throw new UnAuthorizedException("로그인 먼저 해주세요", HttpStatus.UNAUTHORIZED);
-		}
+//		// 1. 인증검사
+//		User principal = (User) session.getAttribute(Define.PRINCIPAL); // Object 타입을 다운캐스팅
+//		if (principal == null) {
+//			throw new UnAuthorizedException("로그인 먼저 해주세요", HttpStatus.UNAUTHORIZED);
+//		}
 
 		return "account/withdraw";
 	}
@@ -140,9 +140,9 @@ public class AccountController {
 
 		// 1. 인증검사
 		User principal = (User) session.getAttribute(Define.PRINCIPAL); // Object 타입을 다운캐스팅
-		if (principal == null) {
-			throw new UnAuthorizedException("로그인 먼저 해주세요", HttpStatus.UNAUTHORIZED);
-		}
+//		if (principal == null) {
+//			throw new UnAuthorizedException("로그인 먼저 해주세요", HttpStatus.UNAUTHORIZED);
+//		}
 
 		// 2. 유효성 검사
 		if (dto.getAmount() == null) {
@@ -166,11 +166,11 @@ public class AccountController {
 	@GetMapping("/deposit")
 	public String depositPage() {
 
-		// 1. 인증검사
-		User principal = (User) session.getAttribute(Define.PRINCIPAL); // Object 타입을 다운캐스팅
-		if (principal == null) {
-			throw new UnAuthorizedException("로그인 먼저 해주세요", HttpStatus.UNAUTHORIZED);
-		}
+//		// 1. 인증검사
+//		User principal = (User) session.getAttribute(Define.PRINCIPAL); // Object 타입을 다운캐스팅
+//		if (principal == null) {
+//			throw new UnAuthorizedException("로그인 먼저 해주세요", HttpStatus.UNAUTHORIZED);
+//		}
 
 		return "account/deposit";
 	}
@@ -181,9 +181,9 @@ public class AccountController {
 
 		// 1. 인증검사
 		User principal = (User) session.getAttribute(Define.PRINCIPAL); // Object 타입을 다운캐스팅
-		if (principal == null) {
-			throw new UnAuthorizedException("로그인 먼저 해주세요", HttpStatus.UNAUTHORIZED);
-		}
+//		if (principal == null) {
+//			throw new UnAuthorizedException("로그인 먼저 해주세요", HttpStatus.UNAUTHORIZED);
+//		}
 
 		// 2. 유효성검사
 		if (dto.getAmount() == null) { // isempty 왜 안해? Long타입이라서 그런거래
@@ -206,11 +206,11 @@ public class AccountController {
 	// 이체 페이지 요청
 	@GetMapping("/transfer")
 	public String transferPage() {
-		// 1. 인증검사
-		User principal = (User) session.getAttribute(Define.PRINCIPAL); // Object 타입을 다운캐스팅
-		if (principal == null) {
-			throw new UnAuthorizedException("로그인 먼저 해주세요", HttpStatus.UNAUTHORIZED);
-		}
+//		// 1. 인증검사
+//		User principal = (User) session.getAttribute(Define.PRINCIPAL); // Object 타입을 다운캐스팅
+//		if (principal == null) {
+//			throw new UnAuthorizedException("로그인 먼저 해주세요", HttpStatus.UNAUTHORIZED);
+//		}
 
 		return "account/transfer";
 	}
@@ -220,9 +220,9 @@ public class AccountController {
 	public String transferProc(transferFormDTO dto) {
 		// 1. 인증검사
 		User principal = (User) session.getAttribute(Define.PRINCIPAL); // Object 타입을 다운캐스팅
-		if (principal == null) {
-			throw new UnAuthorizedException("로그인 먼저 해주세요", HttpStatus.UNAUTHORIZED);
-		}
+//		if (principal == null) {
+//			throw new UnAuthorizedException("로그인 먼저 해주세요", HttpStatus.UNAUTHORIZED);
+//		}
 		
 		// 2. 유효성검사
 		if (dto.getAmount() == null) { // isempty 왜 안해? Long타입이라서 그런거래
@@ -263,9 +263,9 @@ public class AccountController {
 		
 		// 인증검사
 		User principal = (User) session.getAttribute(Define.PRINCIPAL); // Object 타입을 다운캐스팅
-		if (principal == null) {
-			throw new UnAuthorizedException(Define.ENTER_YOUR_LOGIN, HttpStatus.UNAUTHORIZED);
-		}
+//		if (principal == null) {
+//			throw new UnAuthorizedException(Define.ENTER_YOUR_LOGIN, HttpStatus.UNAUTHORIZED);
+//		}
 		
 		Account account = accountService.readByAccountId(id);
 		
