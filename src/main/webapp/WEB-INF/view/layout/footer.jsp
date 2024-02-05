@@ -5,7 +5,7 @@
     
     
 <!-- 하단 푸터 사용 -->
-<div class="jumbotron text-center" style="margin-bottom:0">
+<div class="jumbotron text-center" style="margin-bottom:0; width: 100%;">
   <p>Footer</p>
 </div>
 

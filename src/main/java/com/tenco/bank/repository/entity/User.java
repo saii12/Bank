@@ -23,5 +23,13 @@ public class User {
 	private String password;
 	private String fullname;
 	private Timestamp createdAt;
+	
+	private String originFileName;
+	private String uploadFileName;
 
+	// 사용자가 회원가입시 이미지 존재, 이미지 존재X 에 따라 이미지 경로 선택하기
+	public String setupUserImage() {
+		return uploadFileName == null ? 
+				"https://picsum.photos/id/1/350" : "/images/upload/" + uploadFileName;
+	}
 }

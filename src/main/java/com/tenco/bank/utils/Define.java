@@ -6,6 +6,12 @@ public class Define {
 	// instance들끼리 공유할 수 있는 변수(static)
 	public static final String PRINCIPAL = "principal";
 	
+	// 이미지 관련 
+	public static final String UPLOAD_FILE_DIRECTORY = "C:\\work_spring\\upload";
+	public static final int MAX_FILE_SIZE = 1024 * 1024 * 20; // 20MB
+	// 1 byte
+	// 1024 byte -> 1kb
+	
 	// Account
 	public static final String EXIST_ACCOUNT = "이미 계좌가 존재합니다.";
 	public static final String NOT_EXIST_ACCOUNT = "존재하는 계좌가 없습니다.";
